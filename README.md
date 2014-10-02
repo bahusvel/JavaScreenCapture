@@ -1,10 +1,9 @@
 JavaScreenCapture
 =================
+Allows to record a video of your desktop screen. And is completely platform independent, if your platform can run Java, this will run on it, as its only dependency is AWT, which is supplied with the JRE version of SE platform since version 1.3 !!! Altough it does use a modern scheduler construct from JRE version 1.7 so you will need atleast that to run this :P.
 
 Screen capture written in pure java, no dependencies, runs at ANY FPS !!! (Limited by machine's performance)
-
-Runs 30FPS+ No problem whatsover without even loading my machine.
-
+Runs 30FPS+ on my machine no problem whatsover without even loading my machine.
 Recording is smooth although with some settings weird things can happen.
 
 ###Implementation###
