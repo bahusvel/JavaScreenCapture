@@ -1,8 +1,9 @@
 package capture.multi;
 
-import javax.imageio.ImageIO;
+import save.SequenceEncoder;
+
+import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by denislavrov on 10/2/14.
@@ -15,13 +16,17 @@ public class MultiTest {
         Thread.sleep(5000);
         cs.stop();
         System.out.println("Finished Capture");
-        cs.getStore().forEach(im -> {
-            try {
-                ImageIO.write(im, "JPG", new File("pics/" + System.nanoTime() + ".jpg"));
-            } catch (IOException e) {
+
+        SequenceEncoder se = new SequenceEncoder(new File("test.mp4"), new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+        cs.getStore().forEach(bi ->{
+            try{
+                se.encodeNativeFrame(bi);
+            }catch (Exception e){
                 e.printStackTrace();
             }
         });
+        se.finish();
+
         System.out.println("FPS " + cs.getStore().size());
     }
 }
