@@ -10,7 +10,7 @@ import java.io.File;
  */
 public class MultiTest {
     public static void main(String[] args) throws Exception {
-        CaptureScheduler cs = new CaptureScheduler(6,30);
+        BareCaptureScheduler cs = new BareCaptureScheduler(6,30);
         System.out.println("Capture Started");
         cs.init();
         Thread.sleep(5000);
@@ -18,6 +18,7 @@ public class MultiTest {
         System.out.println("Finished Capture");
 
         SequenceEncoder se = new SequenceEncoder(new File("test.mp4"), new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+        long sTime = System.nanoTime();
         cs.getStore().forEach(bi ->{
             try{
                 se.encodeNativeFrame(bi);
@@ -25,6 +26,7 @@ public class MultiTest {
                 e.printStackTrace();
             }
         });
+        System.out.println("Saving took: " + (System.nanoTime()-sTime)/1000_000L + "ms");
         se.finish();
 
         System.out.println("FPS " + cs.getStore().size());

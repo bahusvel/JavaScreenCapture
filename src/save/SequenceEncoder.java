@@ -1,5 +1,6 @@
 package save;
 
+import capture.multi.test;
 import org.jcodec.codecs.h264.H264Encoder;
 import org.jcodec.codecs.h264.H264Utils;
 import org.jcodec.common.NIOUtils;
@@ -41,8 +42,10 @@ public class SequenceEncoder {
     private ByteBuffer _out;
     private int frameNo;
     private MP4Muxer muxer;
+    private Rectangle dimensions;
 
     public SequenceEncoder(File out, Rectangle dimensions) throws IOException {
+        this.dimensions = dimensions;
         this.ch = NIOUtils.writableFileChannel(out);
 
         // Muxer that will store the encoded frames
@@ -65,7 +68,6 @@ public class SequenceEncoder {
         // MP4
         spsList = new ArrayList<ByteBuffer>();
         ppsList = new ArrayList<ByteBuffer>();
-
     }
 
     public void encodeNativeFrame(BufferedImage pic) throws IOException {
@@ -77,6 +79,8 @@ public class SequenceEncoder {
         for (int i = 0; i < 3; i++)
             Arrays.fill(toEncode.getData()[i], 0);
         transform.transform(AWTUtil.fromBufferedImage(pic), toEncode);
+
+        //transform.transform(new Picture());
 
 
         // Encode image into H.264 frame, the result is stored in '_out' buffer
@@ -93,6 +97,35 @@ public class SequenceEncoder {
 
         frameNo++;
     }
+
+    public void encodeNativeFrame(int[] pic) throws IOException {
+        if (toEncode == null) {
+            toEncode = Picture.create(dimensions.width,dimensions.height, ColorSpace.YUV420);
+        }
+        int[][] picData = new int[1][];
+        picData[0] = pic;
+        Picture old = test.fromBufferedImage(pic, dimensions);
+
+        for (int i = 0; i < 3; i++)
+            Arrays.fill(toEncode.getData()[i], 0);
+        transform.transform(old, toEncode);
+
+        // Encode image into H.264 frame, the result is stored in '_out' buffer
+        _out.clear();
+        ByteBuffer result = encoder.encodeFrame( _out, toEncode);
+
+        // Based on the frame above form correct MP4 packet
+        spsList.clear();
+        ppsList.clear();
+        H264Utils.encodeMOVPacket(result,spsList,ppsList);
+
+        // Add packet to video track
+        outTrack.addFrame(new MP4Packet(result, frameNo, 25, 1, frameNo, true, null, frameNo, 0));
+
+        frameNo++;
+    }
+
+
 
     public void finish() throws IOException {
         // Push saved SPS/PPS to a special storage in MP4
