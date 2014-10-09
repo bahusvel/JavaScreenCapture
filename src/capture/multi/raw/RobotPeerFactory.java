@@ -1,4 +1,4 @@
-package capture.multi;
+package capture.multi.raw;
 
 import sun.lwawt.macosx.LWCToolkit;
 

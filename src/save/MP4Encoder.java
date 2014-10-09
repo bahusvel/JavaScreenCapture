@@ -1,5 +1,6 @@
 package save;
 
+import capture.multi.raw.CaptureFrame;
 import capture.multi.test;
 import org.jcodec.codecs.h264.H264Encoder;
 import org.jcodec.codecs.h264.H264Utils;
@@ -31,7 +32,7 @@ import java.util.Arrays;
  * @author The JCodec project
  *
  */
-public class SequenceEncoder {
+public class MP4Encoder {
     private SeekableByteChannel ch;
     private Picture toEncode;
     private Transform transform;
@@ -44,7 +45,7 @@ public class SequenceEncoder {
     private MP4Muxer muxer;
     private Rectangle dimensions;
 
-    public SequenceEncoder(File out, Rectangle dimensions) throws IOException {
+    public MP4Encoder(File out, Rectangle dimensions) throws IOException {
         this.dimensions = dimensions;
         this.ch = NIOUtils.writableFileChannel(out);
 
@@ -70,18 +71,14 @@ public class SequenceEncoder {
         ppsList = new ArrayList<ByteBuffer>();
     }
 
-    public void encodeNativeFrame(BufferedImage pic) throws IOException {
+    public void encodeNativeFrame(CaptureFrame pic) throws IOException {
         if (toEncode == null) {
             toEncode = Picture.create(pic.getWidth(), pic.getHeight(), ColorSpace.YUV420);
         }
 
-
         for (int i = 0; i < 3; i++)
             Arrays.fill(toEncode.getData()[i], 0);
-        transform.transform(AWTUtil.fromBufferedImage(pic), toEncode);
-
-        //transform.transform(new Picture());
-
+        transform.transform(pic.pictureRGB(), toEncode);
 
         // Encode image into H.264 frame, the result is stored in '_out' buffer
         _out.clear();
@@ -97,35 +94,6 @@ public class SequenceEncoder {
 
         frameNo++;
     }
-
-    public void encodeNativeFrame(int[] pic) throws IOException {
-        if (toEncode == null) {
-            toEncode = Picture.create(dimensions.width,dimensions.height, ColorSpace.YUV420);
-        }
-        int[][] picData = new int[1][];
-        picData[0] = pic;
-        Picture old = test.fromBufferedImage(pic, dimensions);
-
-        for (int i = 0; i < 3; i++)
-            Arrays.fill(toEncode.getData()[i], 0);
-        transform.transform(old, toEncode);
-
-        // Encode image into H.264 frame, the result is stored in '_out' buffer
-        _out.clear();
-        ByteBuffer result = encoder.encodeFrame( _out, toEncode);
-
-        // Based on the frame above form correct MP4 packet
-        spsList.clear();
-        ppsList.clear();
-        H264Utils.encodeMOVPacket(result,spsList,ppsList);
-
-        // Add packet to video track
-        outTrack.addFrame(new MP4Packet(result, frameNo, 25, 1, frameNo, true, null, frameNo, 0));
-
-        frameNo++;
-    }
-
-
 
     public void finish() throws IOException {
         // Push saved SPS/PPS to a special storage in MP4
