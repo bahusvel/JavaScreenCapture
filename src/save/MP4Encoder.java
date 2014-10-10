@@ -34,8 +34,6 @@ import java.util.Arrays;
  */
 public class MP4Encoder {
     private SeekableByteChannel ch;
-    private Picture toEncode;
-    private Transform transform;
     private H264Encoder encoder;
     private ArrayList<ByteBuffer> spsList;
     private ArrayList<ByteBuffer> ppsList;
@@ -61,24 +59,14 @@ public class MP4Encoder {
         // Create an instance of encoder
         encoder = new H264Encoder();
 
-        // Transform to convert between RGB and YUV
-        transform = ColorUtil.getTransform(ColorSpace.RGB, ColorSpace.YUV420);
-
-
         // Encoder extra data ( SPS, PPS ) to be stored in a special place of
         // MP4
-        spsList = new ArrayList<ByteBuffer>();
-        ppsList = new ArrayList<ByteBuffer>();
+        spsList = new ArrayList<>();
+        ppsList = new ArrayList<>();
     }
 
     public void encodeNativeFrame(CaptureFrame pic) throws IOException {
-        if (toEncode == null) {
-            toEncode = Picture.create(pic.getWidth(), pic.getHeight(), ColorSpace.YUV420);
-        }
-
-        for (int i = 0; i < 3; i++)
-            Arrays.fill(toEncode.getData()[i], 0);
-        transform.transform(pic.pictureRGB(), toEncode);
+        Picture toEncode = pic.pictureYUV420();
 
         // Encode image into H.264 frame, the result is stored in '_out' buffer
         _out.clear();
