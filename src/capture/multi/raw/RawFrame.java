@@ -14,7 +14,7 @@ import static org.jcodec.common.model.ColorSpace.RGB;
 /**
  * Created by denislavrov on 10/10/14.
  */
-public class CaptureFrame implements Serializable, DataType {
+public class RawFrame implements DataType {
     private int[] data;
     private Rectangle dim;
     private long stime;
@@ -44,7 +44,7 @@ public class CaptureFrame implements Serializable, DataType {
         return stime + duration / 2;
     }
 
-    public CaptureFrame(int[] data, Rectangle dim, long stime, long duration) {
+    public RawFrame(int[] data, Rectangle dim, long stime, long duration) {
         this.data = data;
         this.dim = dim;
         this.stime = stime;
@@ -96,13 +96,13 @@ public class CaptureFrame implements Serializable, DataType {
     public Picture pictureYUV420(){
         int width = dim.width;
         int height = dim.height;
-        int uIndex = 0;
 
         Picture dst = Picture.create(width, height, ColorSpace.YUV420);
         int[][] dstData = dst.getData();
 
         int R, G, B, Y, U, V;
         int index = 0;
+        int uIndex = 0;
         int[] ya = dstData[0];
         int[] ua = dstData[1];
         int[] va = dstData[2];

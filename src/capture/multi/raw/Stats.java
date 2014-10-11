@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Created by denislavrov on 10/10/14.
  */
 public class Stats {
-    private ConcurrentLinkedQueue<CaptureFrame> store;
+    private ConcurrentLinkedQueue<RawFrame> store;
     private long MaxClockDeviation;
     private long MinClockDeviation;
     private double AvgClockDeviation;
@@ -17,14 +17,14 @@ public class Stats {
     private long FrameCount;
     private static long toMillis = 1000_000L;
 
-    public Stats(ConcurrentLinkedQueue<CaptureFrame> store) {
+    public Stats(ConcurrentLinkedQueue<RawFrame> store) {
         this.store = store;
         computeStats();
     }
 
     public void computeStats() {
-        long[] times = store.stream().sorted((c1,c2) -> c1.getFrameTime() < c2.getFrameTime() ? -1 : 1).mapToLong(CaptureFrame::getStime).toArray();
-        long[] durations = store.stream().sorted((c1, c2) -> c1.getFrameTime() < c2.getFrameTime() ? -1 : 1).mapToLong(CaptureFrame::getDuration).toArray();
+        long[] times = store.stream().sorted((c1,c2) -> c1.getFrameTime() < c2.getFrameTime() ? -1 : 1).mapToLong(RawFrame::getStime).toArray();
+        long[] durations = store.stream().sorted((c1, c2) -> c1.getFrameTime() < c2.getFrameTime() ? -1 : 1).mapToLong(RawFrame::getDuration).toArray();
         long[] devs = new long[times.length];
         for (int i = 0; i < times.length - 1; i++) {
             devs[i] = times[i + 1] - times[i];
@@ -42,8 +42,8 @@ public class Stats {
     }
 
     public void displayStats() {
-        long[] times = store.stream().mapToLong(CaptureFrame::getStime).toArray();
-        long[] durations = store.stream().mapToLong(CaptureFrame::getDuration).toArray();
+        long[] times = store.stream().mapToLong(RawFrame::getStime).toArray();
+        long[] durations = store.stream().mapToLong(RawFrame::getDuration).toArray();
         long[] devs = new long[times.length];
         for (int i = 0; i < times.length - 1; i++) {
             devs[i] = times[i + 1] - times[i];

@@ -1,6 +1,6 @@
 package capture.multi;
 
-import capture.multi.raw.BareCaptureScheduler;
+import capture.multi.raw.RawCaptureScheduler;
 import capture.multi.raw.Stats;
 import save.MP4Encoder;
 
@@ -12,7 +12,7 @@ import java.io.File;
  */
 public class MultiTest {
     public static void main(String[] args) throws Exception {
-        BareCaptureScheduler cs = new BareCaptureScheduler(6,30);
+        RawCaptureScheduler cs = new RawCaptureScheduler(6,30);
         System.out.println("Capture Started");
         cs.init();
         Thread.sleep(5000);

@@ -1,8 +1,8 @@
 package save.disk;
 
-import capture.multi.raw.CaptureFrame;
 import interfaces.DataSink;
 import interfaces.DataSource;
+import interfaces.DataType;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,17 +16,16 @@ import java.util.zip.GZIPOutputStream;
 /**
  * Created by denislavrov on 10/11/14.
  */
-public class DiskWriterService implements DataSink<CaptureFrame> {
+public class DiskWriterService<T extends DataType> implements DataSink<T> {
     private ExecutorService service = Executors.newSingleThreadExecutor(); // Single thread for now may expand later
     private ObjectOutputStream oos;
-    private DataSource<CaptureFrame> ds;
     private boolean acceptingData = true;
 
     private class DiskFrame implements Runnable {
-        private CaptureFrame frame;
+        private DataType frame;
         private ObjectOutputStream out;
 
-        public DiskFrame(CaptureFrame frame, ObjectOutputStream out) {
+        public DiskFrame(DataType frame, ObjectOutputStream out) {
             this.frame = frame;
             this.out = out;
         }
@@ -41,8 +40,7 @@ public class DiskWriterService implements DataSink<CaptureFrame> {
         }
     }
 
-    public DiskWriterService(DataSource<CaptureFrame> ds, File file) {
-        this.ds = ds;
+    public DiskWriterService(DataSource<T> ds, File file) {
         try {
             oos = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
@@ -78,7 +76,7 @@ public class DiskWriterService implements DataSink<CaptureFrame> {
     }
 
     @Override
-    public void consume(CaptureFrame data) {
+    public void consume(DataType data) {
         service.submit(new DiskFrame(data, oos));
     }
 

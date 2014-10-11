@@ -1,29 +1,22 @@
 package save;
 
-import capture.multi.raw.CaptureFrame;
-import capture.multi.test;
+import capture.multi.raw.RawFrame;
 import org.jcodec.codecs.h264.H264Encoder;
 import org.jcodec.codecs.h264.H264Utils;
 import org.jcodec.common.NIOUtils;
 import org.jcodec.common.SeekableByteChannel;
-import org.jcodec.common.model.ColorSpace;
 import org.jcodec.common.model.Picture;
 import org.jcodec.containers.mp4.Brand;
 import org.jcodec.containers.mp4.MP4Packet;
 import org.jcodec.containers.mp4.TrackType;
 import org.jcodec.containers.mp4.muxer.FramesMP4MuxerTrack;
 import org.jcodec.containers.mp4.muxer.MP4Muxer;
-import org.jcodec.scale.AWTUtil;
-import org.jcodec.scale.ColorUtil;
-import org.jcodec.scale.Transform;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * This class is part of JCodec ( www.jcodec.org ) This software is distributed
@@ -65,7 +58,7 @@ public class MP4Encoder {
         ppsList = new ArrayList<>();
     }
 
-    public void encodeNativeFrame(CaptureFrame pic) throws IOException {
+    public void encodeNativeFrame(RawFrame pic) throws IOException {
         Picture toEncode = pic.pictureYUV420();
 
         // Encode image into H.264 frame, the result is stored in '_out' buffer

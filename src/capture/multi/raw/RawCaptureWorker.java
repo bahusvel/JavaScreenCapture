@@ -7,12 +7,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * Created by denislavrov on 10/3/14.
  */
-public class BareCaptureWorker implements Runnable, CaptureWorker{
+public class RawCaptureWorker implements Runnable, CaptureWorker{
     RobotPeer peer = RobotPeerFactory.getPeer();
     Rectangle captureSize;
-    ConcurrentLinkedQueue<CaptureFrame> sharedStore;
+    ConcurrentLinkedQueue<RawFrame> sharedStore;
 
-    public BareCaptureWorker(Rectangle captureSize, ConcurrentLinkedQueue<CaptureFrame> store) {
+    public RawCaptureWorker(Rectangle captureSize, ConcurrentLinkedQueue<RawFrame> store) {
         this.captureSize = captureSize;
         sharedStore = store;
     }
@@ -23,6 +23,6 @@ public class BareCaptureWorker implements Runnable, CaptureWorker{
         Toolkit.getDefaultToolkit().sync();
         final int[] pixels = peer.getRGBPixels(captureSize);
         final long duration = System.nanoTime() - stime;
-        sharedStore.add(new CaptureFrame(pixels, captureSize, stime, duration));
+        sharedStore.add(new RawFrame(pixels, captureSize, stime, duration));
     }
 }
