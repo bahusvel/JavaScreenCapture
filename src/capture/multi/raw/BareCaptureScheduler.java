@@ -15,6 +15,7 @@ public class BareCaptureScheduler implements CaptureScheduler{
     private ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(THREADS);
     private Rectangle captureSize = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
     private ConcurrentLinkedQueue<CaptureFrame> store = new ConcurrentLinkedQueue<>();
+    private boolean producingData = true;
     final static long toNanos = 1000_000_000L;
 
     public BareCaptureScheduler(int THREADS, Rectangle captureSize) {
@@ -45,7 +46,8 @@ public class BareCaptureScheduler implements CaptureScheduler{
         }
     }
 
-    public void stop(){
+    public void shutdown(){
+        producingData = false;
         scheduledThreadPool.shutdown();
     }
 
@@ -55,5 +57,10 @@ public class BareCaptureScheduler implements CaptureScheduler{
 
     public ConcurrentLinkedQueue<CaptureFrame> getStore(){
         return store;
+    }
+
+    @Override
+    public boolean producingData() {
+        return producingData;
     }
 }

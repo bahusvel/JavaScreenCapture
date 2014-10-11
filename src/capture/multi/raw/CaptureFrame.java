@@ -1,18 +1,20 @@
 package capture.multi.raw;
 
+import interfaces.DataType;
 import org.jcodec.common.model.ColorSpace;
 import org.jcodec.common.model.Picture;
 import sun.awt.image.SunWritableRaster;
 
 import java.awt.*;
 import java.awt.image.*;
+import java.io.Serializable;
 
 import static org.jcodec.common.model.ColorSpace.RGB;
 
 /**
  * Created by denislavrov on 10/10/14.
  */
-public class CaptureFrame {
+public class CaptureFrame implements Serializable, DataType {
     private int[] data;
     private Rectangle dim;
     private long stime;

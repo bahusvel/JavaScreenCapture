@@ -1,7 +1,6 @@
 package capture.multi;
 
 import capture.multi.raw.BareCaptureScheduler;
-import capture.multi.raw.CaptureFrame;
 import capture.multi.raw.Stats;
 import save.MP4Encoder;
 
@@ -17,7 +16,7 @@ public class MultiTest {
         System.out.println("Capture Started");
         cs.init();
         Thread.sleep(5000);
-        cs.stop();
+        cs.shutdown();
         while (!cs.isTerminated());
         System.out.println("Finished Capture");
 

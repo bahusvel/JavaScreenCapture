@@ -1,12 +1,12 @@
 package capture.multi.raw;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import interfaces.DataSource;
+
 
 
 /**
  * Created by denislavrov on 10/10/14.
  */
-public interface CaptureScheduler {
+public interface CaptureScheduler extends DataSource<CaptureFrame> {
     public void init() throws Exception;
-    public void stop();
-    public ConcurrentLinkedQueue<CaptureFrame> getStore();
+    public void shutdown();
 }
