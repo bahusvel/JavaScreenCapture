@@ -94,42 +94,37 @@ public class CaptureFrame {
     public Picture pictureYUV420(){
         int width = dim.width;
         int height = dim.height;
-        int yIndex = 0;
         int uIndex = 0;
 
         Picture dst = Picture.create(width, height, ColorSpace.YUV420);
         int[][] dstData = dst.getData();
 
-
         int R, G, B, Y, U, V;
         int index = 0;
+        int[] ya = dstData[0];
+        int[] ua = dstData[1];
+        int[] va = dstData[2];
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
-                int rgb1 = data[j * width + i];
+                int rgb1 = data[index];
                 R = rgb1 >> 16 & 0xff;
                 G = rgb1 >> 8 & 0xff;
                 B = rgb1 & 0xff;
-                Y = (66  * R + 129 * G +  25 * B + 128 >> 8) +  16;
-                U = (-38 * R -  74 * G + 112 * B + 128 >> 8) + 128;
-                V = (112 * R -  94 * G -  18 * B + 128 >> 8) + 128;
+                Y = (66  * R + 129 * G +  25 * B + 128 >> 8) + 16;
+                ya[index] = Y & 255;
 
-
-                dstData[0][yIndex++] = Y < 0 ? 0 : Y > 255 ? 255 : Y;
-
-                if (j % 2 == 0 && index % 2 == 0)
+                if ((j & 1) == 0 && (i & 1) == 0)
                 {
-                    dstData[1][uIndex] += U < 0 ? 0 : U > 255 ? 255 : U;
-                    dstData[2][uIndex] += V < 0 ? 0 : V > 255 ? 255 : V;
-                    uIndex++;
+                    U = (-38 * R -  74 * G + 112 * B + 128 >> 8) + 128;
+                    V = (112 * R -  94 * G -  18 * B + 128 >> 8) + 128;
+                    ua[uIndex] = U & 255;
+                    va[uIndex++] = V & 255;
                 }
 
                 index ++;
             }
         }
-
-
         return dst;
-
     }
 
     public static void main(String[] args) {
