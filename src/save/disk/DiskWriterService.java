@@ -22,6 +22,25 @@ public class DiskWriterService implements DataSink<CaptureFrame> {
     private DataSource<CaptureFrame> ds;
     private boolean acceptingData = true;
 
+    private class DiskFrame implements Runnable {
+        private CaptureFrame frame;
+        private ObjectOutputStream out;
+
+        public DiskFrame(CaptureFrame frame, ObjectOutputStream out) {
+            this.frame = frame;
+            this.out = out;
+        }
+
+        @Override
+        public void run() {
+            try {
+                out.writeObject(frame);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public DiskWriterService(DataSource<CaptureFrame> ds, File file) {
         this.ds = ds;
         try {

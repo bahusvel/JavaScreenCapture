@@ -16,7 +16,6 @@ public class SaveTest {
         cs.init();
         Thread.sleep(5000);
         cs.shutdown();
-        while (!cs.isTerminated());
         System.out.println("Finished Capture");
     }
 }

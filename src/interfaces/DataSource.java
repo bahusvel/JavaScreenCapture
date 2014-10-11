@@ -9,4 +9,5 @@ public interface DataSource<T extends DataType> {
     public ConcurrentLinkedQueue<T> getStore();
     public boolean producingData();
     public void shutdown();
+    public void shutdownNow();
 }

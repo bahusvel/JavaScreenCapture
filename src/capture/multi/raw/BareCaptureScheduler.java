@@ -1,5 +1,7 @@
 package capture.multi.raw;
 
+import interfaces.DataSource;
+
 import java.awt.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
@@ -9,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by denislavrov on 10/3/14.
  */
-public class BareCaptureScheduler implements CaptureScheduler{
+public class BareCaptureScheduler implements DataSource<CaptureFrame>{
     private int THREADS = 6;
     private int FPS_PER_THREAD = 6;
     private ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(THREADS);
@@ -49,17 +51,23 @@ public class BareCaptureScheduler implements CaptureScheduler{
     public void shutdown(){
         producingData = false;
         scheduledThreadPool.shutdown();
+        try {
+            scheduledThreadPool.awaitTermination(20, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public boolean isTerminated(){
-        return scheduledThreadPool.isTerminated();
+    @Override
+    public void shutdownNow() {
+        producingData = false;
+        scheduledThreadPool.shutdownNow();
     }
 
     public ConcurrentLinkedQueue<CaptureFrame> getStore(){
         return store;
     }
 
-    @Override
     public boolean producingData() {
         return producingData;
     }

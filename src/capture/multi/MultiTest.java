@@ -17,7 +17,6 @@ public class MultiTest {
         cs.init();
         Thread.sleep(5000);
         cs.shutdown();
-        while (!cs.isTerminated());
         System.out.println("Finished Capture");
 
         MP4Encoder se = new MP4Encoder(new File("test.mp4"), new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
