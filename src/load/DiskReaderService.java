@@ -1,7 +1,7 @@
 package load;
 
-import capture.multi.raw.RawFrame;
 import interfaces.DataSource;
+import interfaces.DataType;
 
 import java.io.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -10,39 +10,30 @@ import java.util.zip.GZIPInputStream;
 /**
  * Created by denislavrov on 10/11/14.
  */
-public class DiskLoader implements DataSource<RawFrame> {
-    private ConcurrentLinkedQueue<RawFrame> store = new ConcurrentLinkedQueue<>();
+public class DiskReaderService<T extends DataType> implements DataSource<T> {
+    private ConcurrentLinkedQueue<T> store = new ConcurrentLinkedQueue<>();
     private ObjectInputStream ois;
-    private FrameLoader frameLoader;
+    private FrameReader frameReader;
     private boolean producingData = true;
 
-    private class FrameLoader implements Runnable{
-        private Thread thread;
-        FrameLoader(){
-            thread = new Thread(this);
-            thread.start();
-        }
-
-        public void join(){
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    private class FrameReader extends Thread{
+        FrameReader(){
+            start();
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public void run() {
-            RawFrame frame = null;
+            T frame = null;
             try {
-                frame = (RawFrame) ois.readObject();
+                frame = (T) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
             while (frame != null){
                 store.add(frame);
                 try {
-                    frame = (RawFrame) ois.readObject();
+                    frame = (T) ois.readObject();
                 } catch (EOFException e) {break;}
                 catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
@@ -52,18 +43,18 @@ public class DiskLoader implements DataSource<RawFrame> {
         }
     }
 
-    public DiskLoader(File file){
+    public DiskReaderService(File file){
         try {
             ois = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Something wrong with the file");
         }
-        frameLoader = new FrameLoader();
+        frameReader = new FrameReader();
     }
 
     @Override
-    public ConcurrentLinkedQueue<RawFrame> getStore() {
+    public ConcurrentLinkedQueue<T> getStore() {
         return store;
     }
 
@@ -82,13 +73,16 @@ public class DiskLoader implements DataSource<RawFrame> {
 
     public void shutdown(){
         producingData = false;
-        frameLoader.join();
+        try {
+            frameReader.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         closeStream();
     }
 
     public void shutdownNow(){
         producingData = false;
-        //frameLoader.shutdown();
         closeStream();
     }
 }

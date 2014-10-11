@@ -7,14 +7,14 @@ import interfaces.DataType;
 /**
  * Created by denislavrov on 10/11/14.
  */
-public class DataMonitor<T extends DataType> implements Runnable {
+public class DataMonitor<T extends DataType> extends Thread{
     private DataSource<T> source;
     private DataSink<T> sink;
 
     public DataMonitor(DataSource<T> source, DataSink<T> sink) {
         this.source = source;
         this.sink = sink;
-        new Thread(this).start();
+        start();
     }
 
     @Override
