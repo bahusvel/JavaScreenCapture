@@ -1,7 +1,9 @@
 package load;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.FastInput;
 import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.UnsafeInput;
 import interfaces.DataSource;
 import interfaces.DataType;
 
@@ -14,7 +16,7 @@ import java.util.zip.GZIPInputStream;
  */
 public class DiskReaderService<T extends DataType> implements DataSource<T> {
     private ConcurrentLinkedQueue<T> store = new ConcurrentLinkedQueue<>();
-    private Input input;
+    private FastInput input;
     private Kryo kryo = new Kryo();
     private FrameReader frameReader;
     private boolean producingData = true;
@@ -42,7 +44,7 @@ public class DiskReaderService<T extends DataType> implements DataSource<T> {
 
     public DiskReaderService(File file){
         try {
-            input = new Input(new GZIPInputStream(new FileInputStream(file)));
+            input = new FastInput(new GZIPInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Something wrong with the file");

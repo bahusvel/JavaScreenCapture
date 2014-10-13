@@ -1,7 +1,9 @@
 package save.disk;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.FastOutput;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.io.UnsafeOutput;
 import interfaces.DataSink;
 import interfaces.DataSource;
 import interfaces.DataType;
@@ -19,7 +21,7 @@ import java.util.zip.GZIPOutputStream;
  */
 public class DiskWriterService<T extends DataType> implements DataSink<T> {
     private ExecutorService service = Executors.newSingleThreadExecutor(); // Single thread for now may expand later
-    private Output output;
+    private FastOutput output;
     private Kryo kryo = new Kryo(); // TODO Use thread local here
     private boolean acceptingData = true;
 
@@ -38,7 +40,7 @@ public class DiskWriterService<T extends DataType> implements DataSink<T> {
 
     public DiskWriterService(DataSource<T> ds, File file) {
         try {
-            output = new Output(new GZIPOutputStream(new FileOutputStream(file)));
+            output = new FastOutput(new GZIPOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Something wrong with the file");
