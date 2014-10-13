@@ -1,5 +1,7 @@
 package load;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import interfaces.DataSource;
 import interfaces.DataType;
 
@@ -12,7 +14,8 @@ import java.util.zip.GZIPInputStream;
  */
 public class DiskReaderService<T extends DataType> implements DataSource<T> {
     private ConcurrentLinkedQueue<T> store = new ConcurrentLinkedQueue<>();
-    private ObjectInputStream ois;
+    private Input input;
+    private Kryo kryo = new Kryo();
     private FrameReader frameReader;
     private boolean producingData = true;
 
@@ -24,19 +27,13 @@ public class DiskReaderService<T extends DataType> implements DataSource<T> {
         @Override
         @SuppressWarnings("unchecked")
         public void run() {
-            T frame = null;
-            try {
-                frame = (T) ois.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            T frame = (T) kryo.readClassAndObject(input);
             while (frame != null){
                 store.add(frame);
                 try {
-                    frame = (T) ois.readObject();
-                } catch (EOFException e) {break;}
-                catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
+                    frame = (T) kryo.readClassAndObject(input);
+                } catch (Exception e){
+                    System.err.println("Kryo tried to die");
                 }
             }
             shutdownNow();
@@ -45,7 +42,7 @@ public class DiskReaderService<T extends DataType> implements DataSource<T> {
 
     public DiskReaderService(File file){
         try {
-            ois = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
+            input = new Input(new GZIPInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Something wrong with the file");
@@ -63,14 +60,6 @@ public class DiskReaderService<T extends DataType> implements DataSource<T> {
         return producingData;
     }
 
-    private void closeStream(){
-        try {
-            ois.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void shutdown(){
         producingData = false;
         try {
@@ -78,11 +67,11 @@ public class DiskReaderService<T extends DataType> implements DataSource<T> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        closeStream();
+        input.close();
     }
 
     public void shutdownNow(){
         producingData = false;
-        closeStream();
+        input.close();
     }
 }

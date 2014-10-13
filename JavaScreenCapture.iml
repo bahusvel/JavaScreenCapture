@@ -10,6 +10,7 @@
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="JMF-2.1" level="project" />
     <orderEntry type="library" name="org.jcodec:jcodec:0.1.6-3" level="project" />
+    <orderEntry type="library" name="kryo-3.0" level="project" />
   </component>
 </module>
 

@@ -1,5 +1,7 @@
 package save.disk;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
 import interfaces.DataSink;
 import interfaces.DataSource;
 import interfaces.DataType;
@@ -7,7 +9,6 @@ import interfaces.DataType;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -18,31 +19,26 @@ import java.util.zip.GZIPOutputStream;
  */
 public class DiskWriterService<T extends DataType> implements DataSink<T> {
     private ExecutorService service = Executors.newSingleThreadExecutor(); // Single thread for now may expand later
-    private ObjectOutputStream oos;
+    private Output output;
+    private Kryo kryo = new Kryo(); // TODO Use thread local here
     private boolean acceptingData = true;
 
     private class DiskFrame implements Runnable {
         private DataType frame;
-        private ObjectOutputStream out;
 
-        public DiskFrame(DataType frame, ObjectOutputStream out) {
+        public DiskFrame(DataType frame) {
             this.frame = frame;
-            this.out = out;
         }
 
         @Override
         public void run() {
-            try {
-                out.writeObject(frame);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            kryo.writeClassAndObject(output, frame);
         }
     }
 
     public DiskWriterService(DataSource<T> ds, File file) {
         try {
-            oos = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
+            output = new Output(new GZIPOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Something wrong with the file");
@@ -58,26 +54,18 @@ public class DiskWriterService<T extends DataType> implements DataSink<T> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        try {
-            oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        output.close();
     }
 
     public void shutdownNow(){
         acceptingData = false;
         service.shutdownNow();
-        try {
-            oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        output.close();
     }
 
     @Override
     public void consume(DataType data) {
-        service.submit(new DiskFrame(data, oos));
+        service.submit(new DiskFrame(data));
     }
 
     @Override
