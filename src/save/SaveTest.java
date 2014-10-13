@@ -2,7 +2,8 @@ package save;
 
 import capture.multi.raw.RawCaptureScheduler;
 import capture.multi.raw.RawFrame;
-import save.disk.NativeDiskWriter;
+import save.disk.DiskWriter;
+
 
 import java.io.File;
 
@@ -12,7 +13,7 @@ import java.io.File;
 public class SaveTest {
     public static void main(String[] args) throws Exception {
         RawCaptureScheduler cs = new RawCaptureScheduler(4,30);
-        NativeDiskWriter<RawFrame> dsk = new NativeDiskWriter<>(cs, new File("save.bin"));
+        DiskWriter<RawFrame> dsk = new DiskWriter<>(cs, new File("save.bin"));
         System.out.println("Capture Started");
         cs.init();
         Thread.sleep(10000);

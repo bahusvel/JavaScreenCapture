@@ -3,6 +3,8 @@ package save.disk;
 import interfaces.DataSink;
 import interfaces.DataSource;
 import interfaces.DataType;
+import net.jpountz.lz4.LZ4BlockOutputStream;
+import net.jpountz.lz4.LZ4Factory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,12 +13,14 @@ import java.io.ObjectOutputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by denislavrov on 10/11/14.
  */
-public class NativeDiskWriter<T extends DataType> implements DataSink<T> {
+public class DiskWriter<T extends DataType> implements DataSink<T> {
     private ExecutorService service = Executors.newSingleThreadExecutor(); // Single thread for now may expand later
     private ObjectOutputStream oos;
     private boolean acceptingData = true;
@@ -38,9 +42,18 @@ public class NativeDiskWriter<T extends DataType> implements DataSink<T> {
         }
     }
 
-    public NativeDiskWriter(DataSource<T> ds, File file) {
+    public DiskWriter(DataSource<T> ds, File file) {
         try {
-            oos = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
+            /*
+            oos = new ObjectOutputStream(new LZ4BlockOutputStream(
+                    new FileOutputStream(file),
+                    512_000, // May need a little tuning, but increases compression
+                    LZ4Factory.unsafeInstance().fastCompressor()
+            ));
+            */
+            oos = new ObjectOutputStream(new DeflaterOutputStream(new FileOutputStream(file)
+            ,new Deflater(Deflater.BEST_SPEED))); // Similar in perfomance to LZ4 but trashes it in compression
+
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Something wrong with the file");
@@ -74,7 +87,7 @@ public class NativeDiskWriter<T extends DataType> implements DataSink<T> {
     }
 
     @Override
-    public void consume(DataType data) {
+    public void consume(T data) {
         service.submit(new DiskFrame(data));
     }
 

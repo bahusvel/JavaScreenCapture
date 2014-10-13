@@ -19,11 +19,11 @@ import java.util.zip.GZIPOutputStream;
 /**
  * Created by denislavrov on 10/11/14.
  */
-public class DiskWriterService<T extends DataType> implements DataSink<T> {
-    private ExecutorService service = Executors.newSingleThreadExecutor(); // Single thread for now may expand later
-    private FastOutput output;
-    private Kryo kryo = new Kryo(); // TODO Use thread local here
-    private boolean acceptingData = true;
+public class KryoDiskWriter<T extends DataType> implements DataSink<T> {
+    protected ExecutorService service = Executors.newSingleThreadExecutor(); // Single thread for now may expand later
+    protected FastOutput output;
+    protected Kryo kryo = new Kryo(); // TODO Use thread local here
+    protected boolean acceptingData = true;
 
     private class DiskFrame implements Runnable {
         private DataType frame;
@@ -38,7 +38,7 @@ public class DiskWriterService<T extends DataType> implements DataSink<T> {
         }
     }
 
-    public DiskWriterService(DataSource<T> ds, File file) {
+    public KryoDiskWriter(DataSource<T> ds, File file) {
         try {
             output = new FastOutput(new GZIPOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
@@ -66,7 +66,7 @@ public class DiskWriterService<T extends DataType> implements DataSink<T> {
     }
 
     @Override
-    public void consume(DataType data) {
+    public void consume(T data) {
         service.submit(new DiskFrame(data));
     }
 

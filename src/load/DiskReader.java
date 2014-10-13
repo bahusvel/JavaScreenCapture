@@ -2,15 +2,17 @@ package load;
 
 import interfaces.DataSource;
 import interfaces.DataType;
+import net.jpountz.lz4.LZ4BlockInputStream;
+import net.jpountz.lz4.LZ4Factory;
 
 import java.io.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.zip.GZIPInputStream;
+import java.util.zip.*;
 
 /**
  * Created by denislavrov on 10/11/14.
  */
-public class NativeDiskReader<T extends DataType> implements DataSource<T> {
+public class DiskReader<T extends DataType> implements DataSource<T> {
     private ConcurrentLinkedQueue<T> store = new ConcurrentLinkedQueue<>();
     private ObjectInputStream ois;
     private FrameReader frameReader;
@@ -44,9 +46,15 @@ public class NativeDiskReader<T extends DataType> implements DataSource<T> {
         }
     }
 
-    public NativeDiskReader(File file) {
+    public DiskReader(File file) {
         try {
-            ois = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
+            /*
+            ois = new ObjectInputStream(new LZ4BlockInputStream(
+                    new FileInputStream(file),
+                    LZ4Factory.unsafeInstance().fastDecompressor()
+            ));
+            */
+            ois = new ObjectInputStream(new InflaterInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Something wrong with the file");
