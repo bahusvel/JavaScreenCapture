@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class LoadTest {
     public static void main(String[] args) throws IOException {
-        DiskReaderService<RawFrame> loader = new DiskReaderService<>(new File("save.bin"));
+        NativeDiskReader<RawFrame> loader = new NativeDiskReader<>(new File("save.bin"));
         loader.shutdown();
 
         MP4Encoder se = new MP4Encoder(new File("test.mp4"), new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
