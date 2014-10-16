@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
+   <children>
+      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="200.0" fitWidth="200.0" visible="false">
+               <image>
+                  <Image url="@On.png" />
+               </image>
+            </ImageView>
+            <StackPane fx:id="pie" prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fitHeight="200.0" fitWidth="200.0">
+                     <image>
+                        <Image url="@PieSlice.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="45.0">
+                     <image>
+                        <Image url="@PieSlice.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="90.0">
+                     <image>
+                        <Image url="@PieSlice.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="135.0">
+                     <image>
+                        <Image url="@PieSlice.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="180.0">
+                     <image>
+                        <Image url="@PieSlice.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="225.0">
+                     <image>
+                        <Image url="@PieSlice.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="270.0">
+                     <image>
+                        <Image url="@PieSlice.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="315.0">
+                     <image>
+                        <Image url="@PieSlice.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="200.0" fitWidth="200.0">
+                     <image>
+                        <Image url="@PieRing.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <ImageView fitHeight="200.0" fitWidth="200.0" onMouseEntered="#showPie" onMouseExited="#hidePie">
+               <image>
+                  <Image url="@Base.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="200.0" fitWidth="200.0">
+               <image>
+                  <Image url="@Off.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="200.0" fitWidth="200.0">
+               <image>
+                  <Image url="@Gloss.png" />
+               </image>
+            </ImageView>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>
