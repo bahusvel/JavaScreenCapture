@@ -2,8 +2,10 @@ package load;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.FastInput;
-import interfaces.DataSource;
-import interfaces.DataType;
+import datastructure.ExchangeQueue;
+import streamapi.DataSource;
+import streamapi.DataStorage;
+import streamapi.DataType;
 
 import java.io.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -13,7 +15,7 @@ import java.util.zip.GZIPInputStream;
  * Created by denislavrov on 10/11/14.
  */
 public class KryoDiskReader<T extends DataType> implements DataSource<T> {
-    protected ConcurrentLinkedQueue<T> store = new ConcurrentLinkedQueue<>();
+    protected DataStorage<T> store = new ExchangeQueue<>();
     protected FastInput input;
     protected Kryo kryo = new Kryo();
     protected Thread frameReader;
@@ -56,7 +58,7 @@ public class KryoDiskReader<T extends DataType> implements DataSource<T> {
 
 
     @Override
-    public ConcurrentLinkedQueue<T> getStore() {
+    public DataStorage<T> getStore() {
         return store;
     }
 

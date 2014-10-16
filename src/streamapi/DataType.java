@@ -1,4 +1,4 @@
-package interfaces;
+package streamapi;
 
 import java.io.Serializable;
 

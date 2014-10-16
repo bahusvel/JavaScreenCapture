@@ -1,9 +1,8 @@
 package encode;
 
 import capture.multi.raw.RawFrame;
-import interfaces.DataMutator;
-import interfaces.DataSink;
-import interfaces.DataSource;
+import streamapi.DataSink;
+import streamapi.DataSource;
 import org.jcodec.codecs.h264.H264Encoder;
 import org.jcodec.codecs.h264.H264Utils;
 import org.jcodec.common.NIOUtils;
@@ -16,13 +15,11 @@ import org.jcodec.containers.mp4.muxer.FramesMP4MuxerTrack;
 import org.jcodec.containers.mp4.muxer.MP4Muxer;
 import save.disk.DataMonitor;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;

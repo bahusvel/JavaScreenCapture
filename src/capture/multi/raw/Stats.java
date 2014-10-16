@@ -1,5 +1,7 @@
 package capture.multi.raw;
 
+import streamapi.DataStorage;
+
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -7,7 +9,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Created by denislavrov on 10/10/14.
  */
 public class Stats {
-    private ConcurrentLinkedQueue<RawFrame> store;
+    private DataStorage<RawFrame> store;
     private long MaxClockDeviation;
     private long MinClockDeviation;
     private double AvgClockDeviation;
@@ -17,7 +19,7 @@ public class Stats {
     private long FrameCount;
     private static long toMillis = 1000_000L;
 
-    public Stats(ConcurrentLinkedQueue<RawFrame> store) {
+    public Stats(DataStorage<RawFrame> store) {
         this.store = store;
         computeStats();
     }

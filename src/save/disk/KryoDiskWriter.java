@@ -2,11 +2,9 @@ package save.disk;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.FastOutput;
-import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.io.UnsafeOutput;
-import interfaces.DataSink;
-import interfaces.DataSource;
-import interfaces.DataType;
+import streamapi.DataSink;
+import streamapi.DataSource;
+import streamapi.DataType;
 
 import java.io.File;
 import java.io.FileOutputStream;

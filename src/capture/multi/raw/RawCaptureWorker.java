@@ -1,5 +1,7 @@
 package capture.multi.raw;
 
+import streamapi.DataStorage;
+
 import java.awt.*;
 import java.awt.peer.RobotPeer;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -10,9 +12,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class RawCaptureWorker implements Runnable, CaptureWorker{
     RobotPeer peer = RobotPeerFactory.getPeer();
     Rectangle captureSize;
-    ConcurrentLinkedQueue<RawFrame> sharedStore;
+    DataStorage<RawFrame> sharedStore;
 
-    public RawCaptureWorker(Rectangle captureSize, ConcurrentLinkedQueue<RawFrame> store) {
+    public RawCaptureWorker(Rectangle captureSize, DataStorage<RawFrame> store) {
         this.captureSize = captureSize;
         sharedStore = store;
     }

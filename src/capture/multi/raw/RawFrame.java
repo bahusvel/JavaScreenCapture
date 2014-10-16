@@ -1,13 +1,12 @@
 package capture.multi.raw;
 
-import interfaces.DataType;
+import streamapi.DataType;
 import org.jcodec.common.model.ColorSpace;
 import org.jcodec.common.model.Picture;
 import sun.awt.image.SunWritableRaster;
 
 import java.awt.*;
 import java.awt.image.*;
-import java.io.Serializable;
 
 import static org.jcodec.common.model.ColorSpace.RGB;
 

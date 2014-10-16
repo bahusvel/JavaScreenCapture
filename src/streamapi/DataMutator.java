@@ -1,4 +1,4 @@
-package interfaces;
+package streamapi;
 
 /**
  * Created by denislavrov on 10/16/14.

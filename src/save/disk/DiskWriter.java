@@ -1,8 +1,8 @@
 package save.disk;
 
-import interfaces.DataSink;
-import interfaces.DataSource;
-import interfaces.DataType;
+import streamapi.DataSink;
+import streamapi.DataSource;
+import streamapi.DataType;
 import net.jpountz.lz4.LZ4BlockOutputStream;
 import net.jpountz.lz4.LZ4Factory;
 
@@ -10,9 +10,6 @@ import java.io.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by denislavrov on 10/11/14.

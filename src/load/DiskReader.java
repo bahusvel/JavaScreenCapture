@@ -1,19 +1,20 @@
 package load;
 
-import interfaces.DataSource;
-import interfaces.DataType;
+import datastructure.ExchangeQueue;
+import streamapi.DataSource;
+import streamapi.DataStorage;
+import streamapi.DataType;
 import net.jpountz.lz4.LZ4BlockInputStream;
 import net.jpountz.lz4.LZ4Factory;
 
 import java.io.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.zip.*;
 
 /**
  * Created by denislavrov on 10/11/14.
  */
 public class DiskReader<T extends DataType> implements DataSource<T> {
-    private ConcurrentLinkedQueue<T> store = new ConcurrentLinkedQueue<>();
+    private DataStorage<T> store = new ExchangeQueue<>();
     private ObjectInputStream ois;
     private FrameReader frameReader;
     private boolean producingData = true;
@@ -65,7 +66,7 @@ public class DiskReader<T extends DataType> implements DataSource<T> {
     }
 
     @Override
-    public ConcurrentLinkedQueue<T> getStore() {
+    public DataStorage<T> getStore() {
         return store;
     }
 

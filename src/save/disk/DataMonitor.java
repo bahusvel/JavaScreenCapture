@@ -1,8 +1,8 @@
 package save.disk;
 
-import interfaces.DataSink;
-import interfaces.DataSource;
-import interfaces.DataType;
+import streamapi.DataSink;
+import streamapi.DataSource;
+import streamapi.DataType;
 
 /**
  * Created by denislavrov on 10/11/14.

@@ -1,6 +1,8 @@
 package capture.multi.raw;
 
-import interfaces.DataSource;
+import datastructure.ExchangeQueue;
+import streamapi.DataSource;
+import streamapi.DataStorage;
 
 import java.awt.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -16,7 +18,7 @@ public class RawCaptureScheduler implements DataSource<RawFrame>{
     private int FPS_PER_THREAD = 6;
     private ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(THREADS);
     private Rectangle captureSize = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-    private ConcurrentLinkedQueue<RawFrame> store = new ConcurrentLinkedQueue<>();
+    private DataStorage<RawFrame> store = new ExchangeQueue<>();
     private boolean producingData = true;
     final static long toNanos = 1000_000_000L;
 
@@ -64,7 +66,7 @@ public class RawCaptureScheduler implements DataSource<RawFrame>{
         scheduledThreadPool.shutdownNow();
     }
 
-    public ConcurrentLinkedQueue<RawFrame> getStore(){
+    public DataStorage<RawFrame> getStore(){
         return store;
     }
 
