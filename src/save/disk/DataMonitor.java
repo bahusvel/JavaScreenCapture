@@ -27,6 +27,14 @@ public class DataMonitor<T extends DataType> extends Thread{
                 sink.shutdown();
                 break;
             }
+            else {
+                try {
+                    Thread.sleep(1L); // prevent DataMonitor from polling too much
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
     }
 }

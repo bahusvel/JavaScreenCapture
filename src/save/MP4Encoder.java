@@ -27,18 +27,18 @@ import java.util.ArrayList;
  */
 public class MP4Encoder {
     private SeekableByteChannel ch;
-    private H264Encoder encoder;
+    private H264Encoder encoder; // Needs to be thread local
     private ArrayList<ByteBuffer> spsList;
     private ArrayList<ByteBuffer> ppsList;
-    private FramesMP4MuxerTrack outTrack;
-    private ByteBuffer _out;
-    private int frameNo;
+    private final FramesMP4MuxerTrack outTrack; // Access should be blocking
+    private ByteBuffer _out; // Needs to be thread local
+    private int frameNo; // Needs to have atomic access (CAS)
     private MP4Muxer muxer;
     private Rectangle dimensions;
 
     public MP4Encoder(File out, Rectangle dimensions) throws IOException {
         this.dimensions = dimensions;
-        this.ch = NIOUtils.writableFileChannel(out);
+        ch = NIOUtils.writableFileChannel(out);
 
         // Muxer that will store the encoded frames
         muxer = new MP4Muxer(ch, Brand.MP4);
@@ -71,7 +71,9 @@ public class MP4Encoder {
         H264Utils.encodeMOVPacket(result,spsList,ppsList);
 
         // Add packet to video track
-        outTrack.addFrame(new MP4Packet(result, frameNo, 25, 1, frameNo, true, null, frameNo, 0));
+        synchronized (outTrack){
+            outTrack.addFrame(new MP4Packet(result, frameNo, 25, 1, frameNo, true, null, frameNo, 0)); // Wonder if I can add frames out of order
+        }
 
         frameNo++;
     }

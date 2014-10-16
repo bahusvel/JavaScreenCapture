@@ -1,6 +1,7 @@
 package load;
 
 import capture.multi.raw.RawFrame;
+import encode.ToMov;
 import save.MP4Encoder;
 
 import java.awt.*;
@@ -13,7 +14,9 @@ import java.io.IOException;
 public class LoadTest {
     public static void main(String[] args) throws IOException {
         DiskReader<RawFrame> loader = new DiskReader<>(new File("save.bin"));
-        loader.shutdown();
+        ToMov encode = new ToMov(loader, new File("test1.mp4"));
+
+        /*
 
         MP4Encoder se = new MP4Encoder(new File("test.mp4"), new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
         long sTime = System.nanoTime();
@@ -26,5 +29,6 @@ public class LoadTest {
         });
         System.out.println("Saving took: " + (System.nanoTime()-sTime)/1000_000L + "ms");
         se.finish();
+        */
     }
 }

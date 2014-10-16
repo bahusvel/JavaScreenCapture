@@ -6,10 +6,7 @@ import interfaces.DataType;
 import net.jpountz.lz4.LZ4BlockOutputStream;
 import net.jpountz.lz4.LZ4Factory;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -44,15 +41,17 @@ public class DiskWriter<T extends DataType> implements DataSink<T> {
 
     public DiskWriter(DataSource<T> ds, File file) {
         try {
-            /*
+
             oos = new ObjectOutputStream(new LZ4BlockOutputStream(
-                    new FileOutputStream(file),
+                    new FileOutputStream(new RandomAccessFile(file,"rw").getFD()),
                     512_000, // May need a little tuning, but increases compression
                     LZ4Factory.unsafeInstance().fastCompressor()
             ));
-            */
-            oos = new ObjectOutputStream(new DeflaterOutputStream(new FileOutputStream(file)
+
+            /*
+            oos = new ObjectOutputStream(new DeflaterOutputStream(new FileOutputStream(new RandomAccessFile(file,"rw").getFD())
             ,new Deflater(Deflater.BEST_SPEED))); // Similar in perfomance to LZ4 but trashes it in compression
+            */
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -48,13 +48,15 @@ public class DiskReader<T extends DataType> implements DataSource<T> {
 
     public DiskReader(File file) {
         try {
-            /*
+
             ois = new ObjectInputStream(new LZ4BlockInputStream(
-                    new FileInputStream(file),
+                    new FileInputStream(new RandomAccessFile(file,"r").getFD()),
                     LZ4Factory.unsafeInstance().fastDecompressor()
             ));
+
+            /*
+            ois = new ObjectInputStream(new InflaterInputStream(new FileInputStream(new RandomAccessFile(file,"r").getFD())));
             */
-            ois = new ObjectInputStream(new InflaterInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Something wrong with the file");
