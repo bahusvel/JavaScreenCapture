@@ -3,6 +3,7 @@ package save;
 import capture.multi.raw.RawCaptureScheduler;
 import capture.multi.raw.RawFrame;
 import save.disk.DiskWriter;
+import save.disk.KryoDiskWriter;
 
 
 import java.io.File;
@@ -16,7 +17,7 @@ public class SaveTest {
         DiskWriter<RawFrame> dsk = new DiskWriter<>(cs, new File("save.bin"));
         System.out.println("Capture Started");
         cs.init();
-        Thread.sleep(10000);
+        Thread.sleep(20_000);
         cs.shutdown();
         System.out.println("Finished Capture");
     }

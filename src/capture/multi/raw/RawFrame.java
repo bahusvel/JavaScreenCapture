@@ -134,4 +134,8 @@ public class RawFrame implements DataType {
         System.out.println(dstData.length);
     }
 
+    @Override
+    public void destroy() {
+        data = null;
+    }
 }

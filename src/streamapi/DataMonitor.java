@@ -1,4 +1,4 @@
-package save.disk;
+package streamapi;
 
 import streamapi.DataSink;
 import streamapi.DataSource;

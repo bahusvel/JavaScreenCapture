@@ -2,24 +2,21 @@ package load;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.FastInput;
-import datastructure.ExchangeQueue;
-import streamapi.DataSource;
-import streamapi.DataStorage;
+import net.jpountz.lz4.LZ4BlockInputStream;
+import net.jpountz.lz4.LZ4Factory;
+import streamapi.AbstractSource;
 import streamapi.DataType;
 
 import java.io.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.zip.GZIPInputStream;
 
 /**
  * Created by denislavrov on 10/11/14.
  */
-public class KryoDiskReader<T extends DataType> implements DataSource<T> {
-    protected DataStorage<T> store = new ExchangeQueue<>();
+public class KryoDiskReader<T extends DataType> extends AbstractSource<T>{
     protected FastInput input;
     protected Kryo kryo = new Kryo();
     protected Thread frameReader;
-    protected boolean producingData = true;
 
     protected class FrameReader extends Thread{
         FrameReader(){
@@ -44,31 +41,20 @@ public class KryoDiskReader<T extends DataType> implements DataSource<T> {
 
     public KryoDiskReader(File file){
         try {
-            input = new FastInput(new GZIPInputStream(new FileInputStream(file)));
+            input = new FastInput(new LZ4BlockInputStream(
+                    new FileInputStream(new RandomAccessFile(file,"r").getFD()),
+                    LZ4Factory.unsafeInstance().fastDecompressor()
+            ));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Something wrong with the file");
         }
-        frameReader = getFrameReader();
+        frameReader = new FrameReader();
     }
 
-    protected Thread getFrameReader(){
-        return new FrameReader();
-    }
-
-
-    @Override
-    public DataStorage<T> getStore() {
-        return store;
-    }
-
-    @Override
-    public boolean producingData() {
-        return producingData;
-    }
 
     public void shutdown(){
-        producingData = false;
+        super.shutdown();
         try {
             frameReader.join();
         } catch (InterruptedException e) {
@@ -78,7 +64,7 @@ public class KryoDiskReader<T extends DataType> implements DataSource<T> {
     }
 
     public void shutdownNow(){
-        producingData = false;
+        super.shutdownNow();
         input.close();
     }
 }

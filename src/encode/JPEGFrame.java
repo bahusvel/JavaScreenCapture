@@ -15,4 +15,9 @@ public class JPEGFrame implements DataType {
     public byte[] getData() {
         return data;
     }
+
+    @Override
+    public void destroy() {
+
+    }
 }

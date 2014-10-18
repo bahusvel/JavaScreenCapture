@@ -1,8 +1,7 @@
 package encode;
 
 import capture.multi.raw.RawFrame;
-import streamapi.DataSink;
-import streamapi.DataSource;
+import streamapi.*;
 import org.jcodec.codecs.h264.H264Encoder;
 import org.jcodec.codecs.h264.H264Utils;
 import org.jcodec.common.NIOUtils;
@@ -13,7 +12,6 @@ import org.jcodec.containers.mp4.MP4Packet;
 import org.jcodec.containers.mp4.TrackType;
 import org.jcodec.containers.mp4.muxer.FramesMP4MuxerTrack;
 import org.jcodec.containers.mp4.muxer.MP4Muxer;
-import save.disk.DataMonitor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by denislavrov on 10/4/14.
  */
-public class ToMov implements DataSink<RawFrame>{
+public class ToMov extends ServiceSink<RawFrame>{
     private static final int THREADS = 4;
     private SeekableByteChannel ch;
     private ArrayList<ByteBuffer> spsList;
@@ -49,8 +47,9 @@ public class ToMov implements DataSink<RawFrame>{
     };
     private long frameNo;
     private MP4Muxer muxer;
-    private boolean acceptingData = true;
-    private ExecutorService service = Executors.newFixedThreadPool(THREADS);
+    {
+        service = Executors.newFixedThreadPool(THREADS);
+    }
     long sTime = System.nanoTime();
 
     private class EncodeTask implements Runnable{
@@ -101,6 +100,9 @@ public class ToMov implements DataSink<RawFrame>{
                 e.printStackTrace();
             }
 
+            data.destroy();
+            data = null;
+
         }
     }
 
@@ -130,20 +132,8 @@ public class ToMov implements DataSink<RawFrame>{
     }
 
     @Override
-    public boolean acceptingData() {
-        return acceptingData;
-    }
-
-
-    @Override
     public void shutdown() {
-        acceptingData = false;
-        service.shutdown();
-        try {
-            service.awaitTermination(10, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        super.shutdown();
 
         // Push saved SPS/PPS to a special storage in MP4
         outTrack.addSampleEntry(H264Utils.createMOVSampleEntry(spsList, ppsList));
@@ -162,8 +152,7 @@ public class ToMov implements DataSink<RawFrame>{
 
     @Override
     public void shutdownNow() {
-        acceptingData = false;
-        service.shutdownNow();
+        super.shutdownNow();
         NIOUtils.closeQuietly(ch);
     }
 }

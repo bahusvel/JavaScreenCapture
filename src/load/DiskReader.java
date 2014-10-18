@@ -1,6 +1,7 @@
 package load;
 
 import datastructure.ExchangeQueue;
+import streamapi.AbstractSource;
 import streamapi.DataSource;
 import streamapi.DataStorage;
 import streamapi.DataType;
@@ -13,11 +14,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * Created by denislavrov on 10/11/14.
  */
-public class DiskReader<T extends DataType> implements DataSource<T> {
-    private DataStorage<T> store = new ExchangeQueue<>();
+public class DiskReader<T extends DataType> extends AbstractSource<T> {
     private ObjectInputStream ois;
     private FrameReader frameReader;
-    private boolean producingData = true;
+    long stime = System.nanoTime();
 
     private class FrameReader extends Thread {
         FrameReader() {
@@ -65,16 +65,6 @@ public class DiskReader<T extends DataType> implements DataSource<T> {
         frameReader = new FrameReader();
     }
 
-    @Override
-    public DataStorage<T> getStore() {
-        return store;
-    }
-
-    @Override
-    public boolean producingData() {
-        return producingData;
-    }
-
     private void closeStream() {
         try {
             ois.close();
@@ -84,17 +74,18 @@ public class DiskReader<T extends DataType> implements DataSource<T> {
     }
 
     public void shutdown() {
-        producingData = false;
         try {
             frameReader.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        super.shutdown();
         closeStream();
     }
 
     public void shutdownNow() {
-        producingData = false;
+        super.shutdownNow();
         closeStream();
+        System.out.println("Read file in: " + (System.nanoTime() - stime) / 1000_000L + "ms");
     }
 }
