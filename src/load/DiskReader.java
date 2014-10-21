@@ -1,5 +1,6 @@
 package load;
 
+import datastructure.BlockingExchangeQueue;
 import datastructure.ExchangeQueue;
 import streamapi.AbstractSource;
 import streamapi.DataSource;
@@ -18,6 +19,10 @@ public class DiskReader<T extends DataType> extends AbstractSource<T> {
     private ObjectInputStream ois;
     private FrameReader frameReader;
     long stime = System.nanoTime();
+    {
+        store = new BlockingExchangeQueue<>(25);
+    }
+
 
     private class FrameReader extends Thread {
         FrameReader() {

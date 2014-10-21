@@ -21,8 +21,16 @@ public class DataMonitor<T extends DataType> extends Thread{
     public void run() {
         while (sink.acceptingData()){
             T data = source.getStore().poll();
-            if (data != null)
+            if (data != null) {
+                while (!sink.wantsData()) {
+                    try {
+                        Thread.sleep(1L);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
                 sink.consume(data);
+            }
             else if (!source.producingData()) {
                 sink.shutdown();
                 break;

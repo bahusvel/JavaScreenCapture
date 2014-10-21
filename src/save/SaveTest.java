@@ -17,7 +17,7 @@ public class SaveTest {
         DiskWriter<RawFrame> dsk = new DiskWriter<>(cs, new File("save.bin"));
         System.out.println("Capture Started");
         cs.init();
-        Thread.sleep(20_000);
+        Thread.sleep(80_000);
         cs.shutdown();
         System.out.println("Finished Capture");
     }

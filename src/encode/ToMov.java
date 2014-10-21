@@ -20,6 +20,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -124,6 +125,11 @@ public class ToMov extends ServiceSink<RawFrame>{
         outTrack = muxer.addTrackForCompressed(TrackType.VIDEO, 25);
 
         DataMonitor<RawFrame> dm = new DataMonitor<>(ds, this);
+    }
+
+    @Override
+    public boolean wantsData() {
+        return ((ThreadPoolExecutor) service).getQueue().size() < 25;
     }
 
     @Override

@@ -25,4 +25,5 @@ public abstract class ServiceSink<T extends DataType> extends AbstractSink<T> {
         super.shutdownNow();
         service.shutdownNow();
     }
+
 }

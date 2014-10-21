@@ -5,6 +5,9 @@ package streamapi;
  */
 public interface DataSink<T extends DataType> {
     public void consume(T data);
+    public default boolean wantsData(){
+        return true;
+    }
     public boolean acceptingData();
     public void shutdown();
     public void shutdownNow();
