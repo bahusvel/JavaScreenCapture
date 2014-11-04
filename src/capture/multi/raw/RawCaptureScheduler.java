@@ -27,12 +27,13 @@ public class RawCaptureScheduler extends AbstractSource<RawFrame>{
         }
     };
     private final static long toNanos = 1000_000_000L;
+    private final Toolkit sync = Toolkit.getDefaultToolkit();
 
     public class RawCaptureWorker implements Runnable{
         @Override
         public void run() {
             final long stime = System.nanoTime();
-            Toolkit.getDefaultToolkit().sync();
+            sync.sync();
             final int[] pixels = localPeer.get().getRGBPixels(captureSize);
             final long duration = System.nanoTime() - stime;
             store.add(new RawFrame(pixels, captureSize, stime, duration));

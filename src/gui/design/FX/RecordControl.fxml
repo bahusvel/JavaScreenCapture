@@ -4,17 +4,16 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
    <children>
-      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="rootStack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseExited="#leftPieControls" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fitHeight="200.0" fitWidth="200.0" visible="false">
+            <ImageView cacheHint="QUALITY" fitHeight="200.0" fitWidth="200.0" mouseTransparent="true" visible="false">
                <image>
                   <Image url="@On.png" />
                </image>
             </ImageView>
-            <StackPane fx:id="pie" prefHeight="150.0" prefWidth="200.0">
+            <StackPane fx:id="pie" cacheHint="SCALE" prefHeight="150.0" prefWidth="200.0">
                <children>
                   <ImageView fitHeight="200.0" fitWidth="200.0">
                      <image>
@@ -63,17 +62,17 @@
                   </ImageView>
                </children>
             </StackPane>
-            <ImageView fitHeight="200.0" fitWidth="200.0" onMouseEntered="#showPie" onMouseExited="#hidePie">
+            <ImageView cacheHint="QUALITY" fitHeight="200.0" fitWidth="200.0" onMouseDragged="#mouseDragged" onMouseEntered="#showPie" onMousePressed="#mousePressed">
                <image>
                   <Image url="@Base.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="200.0" fitWidth="200.0">
+            <ImageView cacheHint="QUALITY" fitHeight="200.0" fitWidth="200.0" mouseTransparent="true">
                <image>
                   <Image url="@Off.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="200.0" fitWidth="200.0">
+            <ImageView cacheHint="QUALITY" fitHeight="200.0" fitWidth="200.0" mouseTransparent="true">
                <image>
                   <Image url="@Gloss.png" />
                </image>

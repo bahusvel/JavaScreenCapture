@@ -20,7 +20,7 @@ public class DiskReader<T extends DataType> extends AbstractSource<T> {
     private FrameReader frameReader;
     long stime = System.nanoTime();
     {
-        store = new BlockingExchangeQueue<>(25);
+        store = new BlockingExchangeQueue<>(30);
     }
 
 
