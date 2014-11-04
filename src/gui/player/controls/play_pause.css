@@ -1,0 +1,9 @@
+.toggle-button{
+	-fx-shape: "M 0 0 L 0 100 L 100 50 z";
+	-fx-pref-width: 25px;
+	-fx-background-insets: 0px;
+}
+
+.toggle-button:selected{
+	-fx-shape: "M 0 0 L 0 100 L 100 100 L 100 0 z M 200 0 L 200 100 L 300 100 L 300 0 z";
+}

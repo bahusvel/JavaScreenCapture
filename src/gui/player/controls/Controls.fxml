@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="350.0" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.player.controls.ControlsController">
+   <children>
+      <Rectangle arcHeight="40.0" arcWidth="40.0" height="60.0" stroke="#757575" strokeType="INSIDE" width="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <fill>
+            <LinearGradient endY="1.0" startX="1.0">
+               <stops>
+                  <Stop color="#6f6d6d" />
+                  <Stop color="#393838" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Rectangle>
+      <HBox alignment="CENTER" layoutX="83.0" layoutY="37.0" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="82.0" AnchorPane.rightAnchor="82.0" AnchorPane.topAnchor="37.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#back" stylesheets="@back.css" />
+            <ToggleButton mnemonicParsing="false" onAction="#playPause" stylesheets="@play_pause.css">
+               <HBox.margin>
+                  <Insets left="20.0" right="20.0" />
+               </HBox.margin>
+            </ToggleButton>
+            <Button mnemonicParsing="false" onAction="#forward" stylesheets="@forward.css" />
+         </children>
+      </HBox>
+   </children>
+</fx:root>

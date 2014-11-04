@@ -1,0 +1,9 @@
+.button {
+	-fx-shape: "M 0 50 L 100 0 L 100 100 z M 100 50 L 200 0 L 200 100 z";
+	-fx-pref-width: 40px;
+	-fx-background-insets: 0px;
+}
+
+.button:armed {
+	-fx-background-color: dimgrey;
+}
