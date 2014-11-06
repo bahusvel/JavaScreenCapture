@@ -18,8 +18,8 @@ public abstract class AbstractMutator<C extends DataType, P extends DataType> im
     }
 
     @Override
-    public DataStorage<P> getStore() {
-        return store;
+    public P getData() {
+        return store.poll();
     }
 
     @Override

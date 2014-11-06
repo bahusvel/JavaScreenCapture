@@ -56,7 +56,7 @@ public class DiskReader<T extends DataType> extends AbstractSource<T> {
         try {
 
             ois = new ObjectInputStream(new LZ4BlockInputStream(
-                    new FileInputStream(new RandomAccessFile(file,"r").getFD()),
+                    new FileInputStream(new RandomAccessFile(file, "r").getFD()),
                     LZ4Factory.unsafeInstance().fastDecompressor()
             ));
 

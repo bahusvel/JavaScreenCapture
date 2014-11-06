@@ -75,4 +75,8 @@ public class ToJPEG extends ServiceMutator<RawFrame, JPEGFrame>{
         super.shutdown();
         System.out.println("Encoding took: " + (System.nanoTime() - sTime) / 1000_000L + "ms");
     }
+
+    public DataStorage<JPEGFrame> getStore(){
+        return store;
+    }
 }

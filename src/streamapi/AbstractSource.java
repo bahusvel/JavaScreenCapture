@@ -2,6 +2,8 @@ package streamapi;
 
 import datastructure.ExchangeQueue;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 
 /**
  * Created by denislavrov on 10/16/14.
@@ -11,8 +13,8 @@ public abstract class AbstractSource<T extends DataType> implements DataSource<T
     protected volatile boolean producingData = true;
 
     @Override
-    public DataStorage<T> getStore() {
-        return store;
+    public T getData() {
+        return store.poll();
     }
 
     @Override

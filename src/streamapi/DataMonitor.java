@@ -20,7 +20,7 @@ public class DataMonitor<T extends DataType> extends Thread{
     @Override
     public void run() {
         while (sink.acceptingData()){
-            T data = source.getStore().poll();
+            T data = source.getData();
             if (data != null) {
                 while (!sink.wantsData()) {
                     try {
