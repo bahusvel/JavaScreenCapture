@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -13,48 +15,86 @@
                   <Image url="@On.png" />
                </image>
             </ImageView>
-            <StackPane fx:id="pie" cacheHint="SCALE" prefHeight="150.0" prefWidth="200.0">
+            <StackPane fx:id="pie" cacheHint="SCALE" prefHeight="150.0" prefWidth="200.0" stylesheets="@../icons.css">
                <children>
-                  <ImageView fitHeight="200.0" fitWidth="200.0">
-                     <image>
-                        <Image url="@PieSlice.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="45.0">
-                     <image>
-                        <Image url="@PieSlice.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="90.0">
-                     <image>
-                        <Image url="@PieSlice.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="135.0">
-                     <image>
-                        <Image url="@PieSlice.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="180.0">
-                     <image>
-                        <Image url="@PieSlice.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="225.0">
-                     <image>
-                        <Image url="@PieSlice.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="270.0">
-                     <image>
-                        <Image url="@PieSlice.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="200.0" fitWidth="200.0" rotate="315.0">
-                     <image>
-                        <Image url="@PieSlice.png" />
-                     </image>
-                  </ImageView>
+                  <Group>
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="200.0">
+                           <image>
+                              <Image url="@PieSlice.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" layoutX="105.0" layoutY="137.0" styleClass="meter" />
+                     </children>
+                  </Group>
+                  <Group rotate="45.0">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="200.0">
+                           <image>
+                              <Image url="@PieSlice.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" layoutX="105.0" layoutY="135.0" rotate="-45.0" styleClass="stop" />
+                     </children></Group>
+                  <Group rotate="90.0">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="200.0">
+                           <image>
+                              <Image url="@PieSlice.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" layoutX="107.0" layoutY="133.0" rotate="-90.0" styleClass="bin" />
+                     </children>
+                  </Group>
+                  <Group rotate="135.0">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="200.0">
+                           <image>
+                              <Image url="@PieSlice.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" layoutX="106.0" layoutY="134.0" rotate="-135.0" styleClass="power" />
+                     </children>
+                  </Group>
+                  <Group rotate="180.0">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="200.0">
+                           <image>
+                              <Image url="@PieSlice.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="107.0" layoutY="133.0" rotate="-180.0" styleClass="micoff" textAlignment="CENTER" />
+                     </children>
+                  </Group>
+                  <Group rotate="225.0">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="200.0">
+                           <image>
+                              <Image url="@PieSlice.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="104.0" layoutY="133.0" rotate="-225.0" styleClass="monitor" textAlignment="CENTER" />
+                     </children>
+                  </Group>
+                  <Group rotate="270.0">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="200.0">
+                           <image>
+                              <Image url="@PieSlice.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="104.0" layoutY="136.0" rotate="-270.0" styleClass="movie" textAlignment="CENTER" />
+                     </children></Group>
+                  <Group rotate="315.0">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="200.0">
+                           <image>
+                              <Image url="@PieSlice.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="104.0" layoutY="134.0" rotate="-315.0" styleClass="cogs" textAlignment="CENTER" />
+                     </children>
+                  </Group>
                   <ImageView fitHeight="200.0" fitWidth="200.0">
                      <image>
                         <Image url="@PieRing.png" />

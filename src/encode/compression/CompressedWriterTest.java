@@ -1,20 +1,16 @@
-package save;
+package encode.compression;
 
 import capture.multi.raw.RawCaptureScheduler;
-import capture.multi.raw.RawFrame;
-import save.disk.DiskWriter;
-import save.disk.KryoDiskWriter;
-
 
 import java.io.File;
 
 /**
- * Created by denislavrov on 10/11/14.
+ * Created by denislavrov on 11/7/14.
  */
-public class SaveTest {
+public class CompressedWriterTest {
     public static void main(String[] args) throws Exception {
         RawCaptureScheduler cs = new RawCaptureScheduler(4,30);
-        DiskWriter<RawFrame> dsk = new DiskWriter<>(cs, new File("save.bin"));
+        CompressedDiskWriter dsk = new CompressedDiskWriter(cs, new File("compressed.bin"));
         System.out.println("Capture Started");
         cs.init();
         Thread.sleep(40_000);
